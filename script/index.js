@@ -64,12 +64,6 @@ const goodsItems = [
   }
 ]
 
-const renderGoods = (mass) => {
-  tableBody.textContent = "";
-  mass.forEach(obj => {
-    tableBody.insertAdjacentElement('beforeend', createRow(obj))
-  });
-};
 const createRow = ({ id, title, price, description, category, discont, count, units, images: { small, big } }) => {
   const tr = document.createElement('tr');
   const createTD = (tagName, className, content = '', dataAttr = false) => {
@@ -98,6 +92,13 @@ const createRow = ({ id, title, price, description, category, discont, count, un
   wrapBtn.insertAdjacentElement('afterbegin', createTD('button', ['table__btn', 'table__btn_pic']));
   tr.append(wrapBtn);
   return tr;
+};
+
+const renderGoods = (mass) => {
+  tableBody.textContent = "";
+  mass.forEach(obj => {
+    tableBody.insertAdjacentElement('beforeend', createRow(obj))
+  });
 };
 
 renderGoods(goodsItems);
