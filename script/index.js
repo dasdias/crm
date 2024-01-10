@@ -77,19 +77,29 @@ const openModal = () => {
 const closeModal = () => {
   overlay.classList.remove('active');
 };
-overlayModal.addEventListener('click', (event) => {
-  event.stopPropagation();
-});
 
-overlay.addEventListener('click', () => {
-  closeModal();
-});
-modalClose.addEventListener('click', () => {
-  closeModal();
+overlay.addEventListener('click', (e) => {
+  const target = e.target;
+  // закрываем модальное окно
+  if (target.classList.contains('overlay') || target.closest('.modal__close')) {
+    closeModal();
+  }
 });
 
 panelAddGoods.addEventListener('click', () => {
   openModal();
+});
+
+tableBody.addEventListener('click', (e) => {
+  const target = e.target;
+  // кликаем по кнопке удалить. Удаляем элемент из DOM и объект их базы
+  if (target.closest('.table__btn_del')) {
+    const etemId = target.dataset.id;
+    const index = goodsItems.findIndex(item => item.id === +etemId);
+    goodsItems.splice(index, 1);
+    console.log('goodsItems: ', goodsItems);
+    target.closest('tr').remove();
+  }
 });
 
 const createRow = ({id, title, price, description,
@@ -118,7 +128,7 @@ const createRow = ({id, title, price, description,
   tr.append(createTD('td', ['table__cell'], '$' + (count * price)));
   const wrapBtn = createTD('span', ['table__cell', 'table__cell_btn-wrapper']);
   wrapBtn.insertAdjacentElement('afterbegin',
-    createTD('button', ['table__btn', 'table__btn_del']));
+    createTD('button', ['table__btn', 'table__btn_del'], '', id));
   wrapBtn.insertAdjacentElement('afterbegin',
     createTD('button', ['table__btn', 'table__btn_edit']));
   wrapBtn.insertAdjacentElement('afterbegin',
