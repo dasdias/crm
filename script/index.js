@@ -87,6 +87,7 @@ const getTotalAmount = (goodsItems) => {
 const openModal = () => { // открываем модальное окно
   vendorCodeId.textContent = Date.now();
   overlay.classList.add('active');
+  modalTotalPrice.textContent = '$0';
 };
 const closeModal = () => { // закрывает модальное окно
   overlay.classList.remove('active');
