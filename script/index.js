@@ -10,6 +10,10 @@ const overlayModal = document.querySelector('.overlay__modal');
 const modalClose = document.querySelector('.modal__close');
 const tableBody = document.querySelector('.table__body');
 const vendorCodeId = document.querySelector('.vendor-code__id');
+const cmsTotalPrice = document.querySelector('.cms__total-price');
+const modalTotalPrice = document.querySelector('.modal__total-price');
+const price = document.querySelector('#price');
+const count = document.querySelector('#count');
 
 overlay.classList.remove('active');
 
@@ -71,6 +75,14 @@ const goodsItems = [
     },
   },
 ];
+
+const getTotalAmount = (goodsItems) => {
+  let priceTotal = 0;
+  goodsItems.forEach(item => {
+    priceTotal += item.price * item.count;
+  });
+  cmsTotalPrice.textContent = `$${priceTotal}`;
+};
 
 const openModal = () => { // открываем модальное окно
   vendorCodeId.textContent = Date.now();
@@ -147,12 +159,12 @@ const renderGoods = (mass) => { // вставляем товары в табли
   mass.forEach(obj => {
     tableBody.insertAdjacentElement('beforeend', createRow(obj));
   });
+  getTotalAmount(goodsItems);
 };
 
 // проверяем чекбокс и блокируем поле дисконт
 modalCheckbox.addEventListener('input', () => {
   if (modalCheckbox.checked) {
-    console.dir(modalCheckbox);
     modalInputDiscount.removeAttribute('disabled');
   } else {
     modalInputDiscount.value = '';
@@ -160,8 +172,53 @@ modalCheckbox.addEventListener('input', () => {
   }
 });
 
+const addGoodsPage = (tableBody, goods) => {
+  tableBody.append(createRow(goods));
+};
+
+
 modalForm.addEventListener('submit', (e) => {
   e.preventDefault();
+  const formData = new FormData(e.target);
+  const goodsObj = Object.fromEntries(formData);
+
+  if (goodsObj.discont === 'on') {
+    goodsObj.discont = modalInputDiscount.value;
+    delete goodsObj.discount_count;
+  } else {
+    goodsObj.discont = false;
+  }
+  goodsObj.id = vendorCodeId.textContent;
+  if (goodsObj.images.name !== '') {
+    goodsObj.images = {
+      'big': `img/${goodsObj.images.name}`,
+      'small': '',
+    };
+  } else {
+    goodsObj.images = {
+      'big': '',
+      'small': '',
+    };
+  }
+  goodsItems.push(goodsObj);
+  addGoodsPage(tableBody, goodsObj);
+  getTotalAmount(goodsItems);
+  closeModal();
+  modalForm.reset();
+});
+const getTotalAmountModal = (count, amount) =>
+  `$${(+amount ? +amount : 0) * (+count ? +count : 1)}`;
+
+price.addEventListener('blur', () => {
+  const count = document.querySelector('#count');
+  modalTotalPrice.textContent =
+    getTotalAmountModal(count.value, price.value);
+});
+
+count.addEventListener('blur', () => {
+  const count = document.querySelector('#count');
+  modalTotalPrice.textContent =
+    getTotalAmountModal(count.value, price.value);
 });
 
 renderGoods(goodsItems);
