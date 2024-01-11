@@ -9,6 +9,7 @@ const overlay = document.querySelector('.overlay');
 const overlayModal = document.querySelector('.overlay__modal');
 const modalClose = document.querySelector('.modal__close');
 const tableBody = document.querySelector('.table__body');
+const vendorCodeId = document.querySelector('.vendor-code__id');
 
 overlay.classList.remove('active');
 
@@ -71,13 +72,15 @@ const goodsItems = [
   },
 ];
 
-const openModal = () => {
+const openModal = () => { // открываем модальное окно
+  vendorCodeId.textContent = Date.now();
   overlay.classList.add('active');
 };
-const closeModal = () => {
+const closeModal = () => { // закрывает модальное окно
   overlay.classList.remove('active');
 };
 
+// отслеживаем клики на модальном окне
 overlay.addEventListener('click', (e) => {
   const target = e.target;
   // закрываем модальное окно
@@ -86,11 +89,12 @@ overlay.addEventListener('click', (e) => {
   }
 });
 
+// клик на кнопке добавления товара
 panelAddGoods.addEventListener('click', () => {
   openModal();
 });
 
-tableBody.addEventListener('click', (e) => {
+tableBody.addEventListener('click', (e) => { // отслеживаем клики по таблице
   const target = e.target;
   // кликаем по кнопке удалить. Удаляем элемент из DOM и объект их базы
   if (target.closest('.table__btn_del')) {
@@ -102,6 +106,7 @@ tableBody.addEventListener('click', (e) => {
   }
 });
 
+// создаем строку в таблице с товаром
 const createRow = ({id, title, price, description,
   category, discont, count, units, images: {small, big}}) => {
   const tr = document.createElement('tr');
@@ -137,11 +142,26 @@ const createRow = ({id, title, price, description,
   return tr;
 };
 
-const renderGoods = (mass) => {
+const renderGoods = (mass) => { // вставляем товары в таблицу
   tableBody.textContent = '';
   mass.forEach(obj => {
     tableBody.insertAdjacentElement('beforeend', createRow(obj));
   });
 };
+
+// проверяем чекбокс и блокируем поле дисконт
+modalCheckbox.addEventListener('input', () => {
+  if (modalCheckbox.checked) {
+    console.dir(modalCheckbox);
+    modalInputDiscount.removeAttribute('disabled');
+  } else {
+    modalInputDiscount.value = '';
+    modalInputDiscount.setAttribute('disabled', 'true');
+  }
+});
+
+modalForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+});
 
 renderGoods(goodsItems);
