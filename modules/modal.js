@@ -1,7 +1,7 @@
-export const modalTotalPrice = document.querySelector('.modal__total-price');
-export const vendorCodeId = document.querySelector('.vendor-code__id');
+import {getDOMElements} from './getDOMElements.js';
 
-const overlay = document.querySelector('.overlay');
+const domElements = getDOMElements();
+const {overlay, modalTotalPrice, vendorCodeId} = domElements;
 
 export const openModal = () => { // открываем модальное окно
   vendorCodeId.textContent = Date.now();

@@ -1,21 +1,27 @@
+import {getDOMElements} from './getDOMElements.js';
 import {openModal} from './modal.js';
-import {vendorCodeId} from '../modules/modal.js';
 import {closeModal} from '../modules/modal.js';
 import {goodsItems} from '../modules/goods.js';
-import {modalTotalPrice} from './modal.js';
-import {addGoodsPage, getTotalAmount, tableBody,
-  getTotalAmountModal} from '../modules/render.js';
+import {
+  addGoodsPage,
+  getTotalAmount,
+  getTotalAmountModal,
+  createRow,
+} from '../modules/render.js';
 
-
-const modalInputDiscount = document.querySelector('.modal__input_discount');
-const modalCheckbox = document.querySelector('.modal__checkbox');
-const panelAddGoods = document.querySelector('.panel__add-goods');
-const modalForm = document.querySelector('.modal__form');
-const price = document.querySelector('#price');
-const count = document.querySelector('#count');
+const {
+  modalTotalPrice,
+  vendorCodeId,
+  modalInputDiscount,
+  modalCheckbox,
+  panelAddGoods,
+  modalForm,
+  price,
+  count,
+  tableBody,
+} = getDOMElements();
 
 export const allEvents = () => {
-  console.log('event');
   // проверяем чекбокс и блокируем поле дисконт/
   modalCheckbox.addEventListener('input', () => {
     if (modalCheckbox.checked) {
@@ -55,7 +61,7 @@ export const allEvents = () => {
       };
     }
     goodsItems.push(goodsObj);
-    addGoodsPage(tableBody, goodsObj);
+    addGoodsPage(tableBody, goodsObj, goodsItems.length);
     getTotalAmount(goodsItems);
     closeModal();
     modalForm.reset();
@@ -80,8 +86,11 @@ export const allEvents = () => {
       const etemId = target.dataset.id;
       const index = goodsItems.findIndex(item => item.id === +etemId);
       goodsItems.splice(index, 1);
-      console.log('goodsItems: ', goodsItems);
-      target.closest('tr').remove();
+      tableBody.textContent = '';
+      goodsItems.map((elem, index) => {
+        tableBody.append(createRow(elem, index + 1));
+      });
+      getTotalAmount(goodsItems);
     }
   });
 };

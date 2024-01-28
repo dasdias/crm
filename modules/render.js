@@ -1,12 +1,15 @@
-export const tableBody = document.querySelector('.table__body');
+import {getDOMElements} from './getDOMElements.js';
 import {goodsItems} from '../modules/goods.js';
 
-const cmsTotalPrice = document.querySelector('.cms__total-price');
-
+// const cmsTotalPrice = document.querySelector('.cms__total-price');
+const {
+  cmsTotalPrice,
+  tableBody,
+} = getDOMElements();
 
 // создаем строку в таблице с товаром
 export const createRow = ({id, title, price, description,
-  category, discont, count, units, images: {small, big}}) => {
+  category, discont, count, units, images: {small, big}}, index) => {
   const tr = document.createElement('tr');
   const createTD = (tagName, className, content = '', dataAttr = false) => {
     const td = document.createElement(tagName);
@@ -17,7 +20,7 @@ export const createRow = ({id, title, price, description,
     }
     return td;
   };
-  tr.append(createTD('td', ['table__cell', 'table__cell_left'], id));
+  tr.append(createTD('td', ['table__cell', 'table__cell_left'], index));
   const secondTD = createTD('td',
     ['table__cell', 'table__cell_left', 'table__cell_name'], title, id);
   const spanElem = createTD('span', ['table__cell-id'], id);
@@ -40,8 +43,8 @@ export const createRow = ({id, title, price, description,
   return tr;
 };
 
-export const addGoodsPage = (tableBody, goods) => {
-  tableBody.append(createRow(goods));
+export const addGoodsPage = (tableBody, goods, index) => {
+  tableBody.append(createRow(goods, index));
 };
 
 
@@ -55,8 +58,8 @@ export const getTotalAmount = (goodsItems) => {
 
 export const renderGoods = (mass) => { // вставляем товары в таблицу
   tableBody.textContent = '';
-  mass.forEach(obj => {
-    tableBody.insertAdjacentElement('beforeend', createRow(obj));
+  mass.forEach((obj, index) => {
+    tableBody.insertAdjacentElement('beforeend', createRow(obj, index + 1));
   });
   getTotalAmount(goodsItems);
 };
