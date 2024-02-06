@@ -92,5 +92,17 @@ export const allEvents = () => {
       });
       getTotalAmount(goodsItems);
     }
+    if (target.closest('.table__btn_pic')) {
+      const picBtn = target.closest('.table__btn_pic');
+      const dataPicUrl = picBtn.dataset.pic;
+      const windowImg = window.open('about:blank', '', `width=640, height=440,
+        left=${(screen.width / 2) - 320},
+        top=${(screen.height / 2) - 220}`);
+      windowImg.document.body.innerHTML = `
+        <div style="display: flex; 
+          justify-content: center; aligln-item: center;">
+          <img style="text-align: center;"
+            src="${dataPicUrl}" alt="foto" /></div>`;
+    }
   });
 };
