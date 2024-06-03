@@ -57,12 +57,9 @@ modalOverlay.addEventListener('click', () => {
 });
 modalFile.addEventListener('change', async () => {
   const textWorningImg = document.createElement('label');
-  textWorningImg.classList.add('.warn-text');
+  textWorningImg.classList.add('warn-text');
 
-  console.log(modalFieldset);
-  console.log(modalFieldset.querySelector('.warn-text'));
   if (modalFieldset.querySelector('.warn-text')) {
-    console.log('label');
     modalFieldset.querySelector('.warn-text').remove();
   }
   if (modalFile.files.length > 0 && modalFile.files[0].size < 1048576) {
