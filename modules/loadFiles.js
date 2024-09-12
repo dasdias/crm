@@ -66,6 +66,8 @@ modalFile.addEventListener('change', async () => {
     const src = URL.createObjectURL(modalFile.files[0]);
     const img = document.createElement('img');
     img.src = src;
+    const result = await toBase64(modalFile.files[0]);
+    img.src = result;
     img.style.cssText = `
       max-width: 500px;
       width: 100%;
@@ -73,7 +75,6 @@ modalFile.addEventListener('change', async () => {
     modalbody.innerText = '';
     modalbody.prepend(img);
     document.body.append(modalOverlay);
-    const result = await toBase64(modalFile.files[0]);
     textWorningImg.innerText = modalFile.files[0].name;
     textWorningImg.style.cssText = `
       color: black;
