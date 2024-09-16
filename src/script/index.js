@@ -4,6 +4,8 @@ import { allEvents } from '../modules/events.js';
 import { closeModal } from '../modules/modal.js';
 import '../modules/loadFiles.js';
 
+import '../css/index.css';
+
 const init = () => {
   renderGoods(goodsItems);
   closeModal();
